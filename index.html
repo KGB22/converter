@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Super Converter</title>
+        <style>
+            .select_h2{
+                color:#b1ecaf;
+                display: flex;
+                justify-content: center;
+            }
+            body{
+                margin: 0;
+                background-color: #b1ecaf;
+                height: 100vh;
+                display: flex;                
+                justify-content: center;
+                align-items: center;
+
+            }
+
+            .container{
+                border-radius: 30px;
+                background-color: white;
+                width: 400px;
+                height: 400px;
+                padding:30px;
+                text-align: center;
+            }
+            .select_unit{
+                padding:10px;
+                border: none;
+                border-bottom: 1px solid #3a3a3a;
+                color:#3a3a3a;
+                outline: none;
+                margin-bottom: 16px;
+                text-align: center;
+            }
+            .box{
+                padding: 25px 0;
+
+            }
+            .box_a{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .label{
+                width: 70px;
+                font-weight: 500;
+            }
+            .input{
+                padding: 10px;
+                outline: none;
+                border: 1px solid #3a3a3a;
+                border-radius: 5px;
+            }
+            .button_box{
+                padding-top:50px;
+                display: flex;
+                gap: 20px;
+                justify-content: center;
+            }
+            .button{
+                padding: 10px;
+                width: 100px;
+                border:none;
+                font-weight: 600;
+                border-radius: 5px;
+                background-color: #b1ecaf;
+                color:#3a3a3a;
+   
+
+            }
+            .button:hover{
+                background-color: #3a3a3a;
+                color:#b1ecaf;
+                cursor: pointer;
+                transition: 0.3s;
+            }
+            input:disabled{
+                background-color: rgba(118, 118, 118, 0.3);
+            }
+            .arrow {
+                display: flex;
+                font-size: 1.2rem;
+                padding: 5px;
+                text-align: center;
+                justify-content: center;
+            }
+
+
+        </style>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    function MinutesToHours() {
+      const [amount, setAmount] = React.useState();
+      const [flipped, setFlipped] = React.useState(false);
+      const onChange = (event) => {
+        setAmount(event.target.value);
+      };
+      const reset = () => {
+        setAmount("");
+      };
+      const onFlip = () => {
+        reset();
+        setFlipped((prev) => !prev);
+      };
+      return (
+        <div className="box">
+          <div className="box_a">
+            <label className="label" htmlfor="minutes">Minutes</label>
+            <input className="input"
+              value={flipped ? amount * 60 : amount}
+              id="minutes"
+              placeholder="Minutes"
+              type="number"
+              onChange={onChange}
+              disabled={flipped}
+            />
+          </div>
+          <div className="arrow">{flipped?"▲":"▼"}</div>
+          <div className="box_a">
+            <label className="label" htmlfor="hours">Hours</label>
+            <input className="input"
+              value={flipped ? amount : Math.round(amount / 60)}
+              id="hours"
+              placeholder="Hours"
+              type="number"
+              disabled={!flipped}
+              onChange={onChange}
+            />
+          </div>
+          <div className="button_box"><button className="button" onClick={reset}>Reset</button>
+            <button className="button"  onClick={onFlip}>{flipped ? "Turn back" : "Switch"}</button></div>
+          
+        </div>
+      );
+    }
+    function KmToMiles() {
+      const [distance, setDistance] = React.useState();
+      const [flipped, setFlipped] = React.useState(false);
+      const onChange = (event) => {
+        setDistance(event.target.value);
+      };
+      const onFlip = () => {
+        reset();
+        setFlipped((prev) => !prev);
+      };
+      const reset = () => {
+        setDistance("");
+      };
+
+      return (
+        <div className="box">
+          <div className="box_a">
+            <label className="label" htmlfor="km">Km</label>
+            <input className="input"
+              id="km"
+              value={flipped ? distance * 1.609 : distance}
+              onChange={onChange}
+              type="number"
+              disabled={flipped}
+              placeholder="Km"
+            />
+          </div>
+          <div className="arrow">{flipped?"▲":"▼"}</div>
+          <div className="box_a"> 
+            <label className="label" htmlfor="m">Miles</label>
+            <input className="input"
+              id="km"
+              value={flipped ? distance : distance * 0.621}
+              onChange={onChange}
+              type="number"
+              disabled={!flipped}
+              placeholder="Miles"
+            />
+          </div>
+          <div className="button_box">
+          <button className="button"  onClick={reset}>Reset</button>
+          <button className="button"  onClick={onFlip}>{flipped ? "Turn back" : "Switch"}</button>
+          </div>
+        </div>
+      );
+    }
+    function SelectYU() {
+      return <h2 className="select_h2">Select your units !</h2>;
+    }
+    function App() {
+      const [index, setIndex] = React.useState("xx");
+      const onSelect = (event) => {
+        setIndex(event.target.value);
+        console.log(event.target.value);
+      };
+      return (
+        <div className="container">
+          <h1 className="title">Super Converter</h1>
+          <select className="select_unit" onChange={onSelect}>
+            <option value="xx">Select units</option>
+            <option className="mh" value="0">minutes & hours</option>
+            <option className="km" value="1">km & miles</option>
+          </select>
+          {index === "0" ? <MinutesToHours /> : null}
+          {index === "1" ? <KmToMiles /> : null}
+          {index === "xx" ? <SelectYU /> : null}
+        </div>
+      );
+    }
+    const root = document.getElementById("root");
+    ReactDOM.render(<App />, root);
+  </script>
+</html>
